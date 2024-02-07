@@ -1,0 +1,14 @@
+/*!*********************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js!./src/style.less ***!
+  \*********************************************************************************************************/
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  position: relative;
+  background-color: black;
+  overflow: hidden;
+}
+
+
+/*# sourceMappingURL=style.css.map*/
