@@ -1,0 +1,24 @@
+{
+  "name": "technicaltaskpixijs",
+  "version": "1.0.0",
+  "description": "A small technical test made with PixiJS, TypeScript and Webpack for a gaming company",
+  "main": "bundle.js",
+  "scripts": {
+    "build": "npm run clean && webpack",
+    "start": "webpack serve",
+    "clean": "rimraf ./dist"
+  },
+  "author": "lfatton",
+  "license": "ISC",
+  "dependencies": {
+    "pixi.js": "^7.4.0"
+  },
+  "devDependencies": {
+    "@webpack-cli/generators": "^3.0.7",
+    "css-loader": "^6.10.0",
+    "html-webpack-plugin": "^5.6.0",
+    "less": "^4.2.0",
+    "less-loader": "^12.2.0",
+    "mini-css-extract-plugin": "^2.8.0"
+  }
+}
