@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
     "target": "es6",
     "strict": true,
     "noImplicitAny": true,
@@ -12,9 +11,5 @@
     "moduleResolution": "node",
     "rootDir": "./src",
     "outDir": "./dist",
-    "paths": {
-      "@assets/*": ["assets/*"],
-      "@src/*": ["src/*"]
-    }
   }
 }

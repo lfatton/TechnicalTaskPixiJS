@@ -1,4 +1,4 @@
-import { Application, DisplayObject } from 'pixi.js';
+import { Application, Assets, DisplayObject } from 'pixi.js';
 import { Scene } from '../scenes/Scene';
 
 export class GameManager {
@@ -28,9 +28,18 @@ export class GameManager {
             height: height
         });
 
+        GameManager.loadAssets();
+
         document.body.appendChild(GameManager.app.view as HTMLCanvasElement);
         GameManager.app.ticker.add(GameManager.update);
         window.addEventListener('resize', GameManager.onResize);
+    }
+
+    private static async loadAssets() {
+        await Assets.load([
+            { alias: 'particle', src: 'particle.png' },
+            { alias: 'fire', src: 'fire.png' }
+        ]);
     }
 
     public static goToScene(newScene: Scene): void {
@@ -43,9 +52,9 @@ export class GameManager {
         GameManager.app.stage.addChild(GameManager.currentScene as DisplayObject);
     }
 
-    private static update(deltaTime: number): void {
+    private static update(): void {
         if (GameManager.currentScene) {
-            GameManager.currentScene.update(deltaTime, GameManager.app.ticker.FPS.toFixed(0));
+            GameManager.currentScene.update(GameManager.app.ticker.deltaMS, GameManager.app.ticker.FPS.toFixed(0));
         }
     }
 

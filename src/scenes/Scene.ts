@@ -6,6 +6,8 @@ import { MainMenuScene } from './MainMenuScene';
 export abstract class Scene extends Container {
     protected FPSCounterText: BitmapText;
     protected backToMainMenuButton: UIButton | undefined;
+    private timeSinceLastUpdate: number = 0;
+    private static readonly INTERVAL_BETWEEN_FPS_UPDATE: number = 500;
     protected constructor(isMainMenu:boolean = true) {
         super();
 
@@ -27,8 +29,16 @@ export abstract class Scene extends Container {
             this.addBackToMainMenuBtn();
     }
 
-    public update(deltaTime: number, fps: string): void {
-        this.updateFPS(fps);
+    public update(deltaMS: number, fps: string): void {
+        if (!this.timeSinceLastUpdate)
+            this.updateFPS(fps);
+
+        this.timeSinceLastUpdate += deltaMS;
+
+        if (this.timeSinceLastUpdate > Scene.INTERVAL_BETWEEN_FPS_UPDATE) {
+            this.updateFPS(fps);
+            this.timeSinceLastUpdate -= Scene.INTERVAL_BETWEEN_FPS_UPDATE;
+        }
     }
 
     public updateFPS(fps: string): void {
