@@ -20,4 +20,4 @@ npm run build
 # to start the server in dev mode with webpack 
 npm run start
 ```
-t should now run on [http://localhost:9000](http://localhost:9000) in your browser :) 
+It should now run on [http://localhost:9000](http://localhost:9000) in your browser :) 

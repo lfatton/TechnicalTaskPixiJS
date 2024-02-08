@@ -1,12 +1,8 @@
-import { Application } from 'pixi.js';
 import './style.less';
+import { SceneManager } from './classes/SceneManager';
+import { MenuScene } from './classes/MenuScene';
 
-const app = new Application({
-    resolution: window.devicePixelRatio || 1,
-    autoDensity: true,
-    backgroundColor: '#BB7CD0',
-    width: window.innerWidth,
-    height: window.innerHeight
-});
+SceneManager.init(window.innerWidth, window.innerHeight, '#BB7CD0');
 
-document.body.appendChild(app.view as HTMLCanvasElement);
+const menuScene: MenuScene = new MenuScene();
+SceneManager.goToScene(menuScene);
