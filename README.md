@@ -20,4 +20,12 @@ npm run build
 # to start the server in dev mode with webpack 
 npm run start
 ```
-It should now run on [http://localhost:9000](http://localhost:9000) in your browser :) 
+It should now run on [http://localhost:9000](http://localhost:9000) in your browser :)
+
+### Assets from
+
+#### Smileys
+*https://openmoji.org/library/*
+
+#### Fire particles emitter
+*https://pixijs.io/pixi-particles-editor/#*

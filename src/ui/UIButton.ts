@@ -1,7 +1,7 @@
 import { DisplayObject, FederatedPointerEvent, Graphics, Text, TextStyle } from 'pixi.js';
 import { GameManager } from '../core/GameManager';
 
-export class UIButton extends Graphics{
+export class UIButton extends Graphics {
     private buttonText: Text;
     constructor(buttonText: string,
                 buttonWidth: number = GameManager.width / 3,

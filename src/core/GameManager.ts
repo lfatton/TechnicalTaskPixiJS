@@ -36,6 +36,8 @@ export class GameManager {
     }
 
     private static async loadAssets() {
+        await Assets.load('smileys.json');
+
         await Assets.load([
             { alias: 'particle', src: 'particle.png' },
             { alias: 'fire', src: 'fire.png' }
