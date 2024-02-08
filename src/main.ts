@@ -1,8 +1,8 @@
 import './style.less';
-import { SceneManager } from './classes/SceneManager';
-import { MenuScene } from './classes/MenuScene';
+import { GameManager } from './core/GameManager';
+import { MainMenuScene } from './scenes/MainMenuScene';
 
-SceneManager.init(window.innerWidth, window.innerHeight, '#BB7CD0');
+GameManager.init(window.innerWidth, window.innerHeight, '#BB7CD0');
 
-const menuScene: MenuScene = new MenuScene();
-SceneManager.goToScene(menuScene);
+const mainMenuScene: MainMenuScene = new MainMenuScene();
+GameManager.goToScene(mainMenuScene);
