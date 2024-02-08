@@ -29,3 +29,6 @@ It should now run on [http://localhost:9000](http://localhost:9000) in your brow
 
 #### Fire particles emitter
 *https://pixijs.io/pixi-particles-editor/#*
+
+### Cards
+*https://screamingbrainstudios.itch.io/poker-pack*

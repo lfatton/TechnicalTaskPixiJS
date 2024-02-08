@@ -86,7 +86,7 @@ export class RichText extends Container {
 
 
         image.x = this.currentXPos;
-        image.anchor.set(0, 0.5);
+        image.anchor.set(0.5);
         this.currentXPos += image.width;
 
         this.addChild(image as DisplayObject);

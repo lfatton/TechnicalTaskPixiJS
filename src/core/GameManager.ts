@@ -39,6 +39,7 @@ export class GameManager {
         await Assets.load('smileys.json');
 
         await Assets.load([
+            { alias: 'card', src: 'card.png' },
             { alias: 'particle', src: 'particle.png' },
             { alias: 'fire', src: 'fire.png' }
         ]);
