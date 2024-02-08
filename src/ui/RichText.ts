@@ -1,5 +1,6 @@
 import { Container, DisplayObject, Sprite, Text } from 'pixi.js';
 import { getRandomNumber, headsOrTails } from '../core/utils';
+import { GameManager } from '../core/GameManager';
 
 export class RichText extends Container {
     public textArrays: string[];
@@ -22,9 +23,6 @@ export class RichText extends Container {
     }
 
     private CreateRichText(isOrderRandom: boolean) {
-        this.removeChildren();
-        this.currentXPos = 0;
-
         let text: string = '';
 
         if (!isOrderRandom) {
@@ -66,6 +64,9 @@ export class RichText extends Container {
     }
 
     private putTextToScreen(text: string): void {
+        if (this.currentXPos > GameManager.width - 100)
+            return;
+
         const textToPrint = new Text(text, {
             fontFamily: 'Arial',
             fontSize: this.textSize,
@@ -80,14 +81,19 @@ export class RichText extends Container {
     }
 
     private putSmileyToScreen(smiley: Sprite): void {
+        if (this.currentXPos > GameManager.width - 100)
+            return;
+
         const image = smiley;
 
-        if (image.width >= 64) {
-            const size = getRandomNumber(32, 64);
-            image.width = size;
-            image.height = size;
-        }
+        image.scale.set(this.textSize / image.height);
 
+        if (image.width >= 50) {
+            const ratio = smiley.width / smiley.height;
+
+            image.width = 50;
+            image.height = 50 / ratio;
+        }
 
         image.x = this.currentXPos;
         image.anchor.set(0, 0.5);
@@ -96,7 +102,13 @@ export class RichText extends Container {
         this.addChild(image as DisplayObject);
     }
 
+    private CleanRichText(): void {
+        this.removeChildren();
+        this.currentXPos = 0;
+    }
+
     public modifyRichText(isOrderRandom: boolean) {
+        this.CleanRichText();
         this.CreateRichText(isOrderRandom);
     }
 }

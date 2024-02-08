@@ -3,14 +3,18 @@ import { DisplayObject, Sprite } from 'pixi.js';
 import { getRandomNumber } from '../core/utils';
 import { RichText } from '../ui/RichText';
 import { GameManager } from '../core/GameManager';
+enum Type {
+    Text = 1,
+    Smiley
+}
 
 export class TextScene extends Scene {
     private timeBetweenTextChange: number = 0;
     private static readonly INTERVAL_BETWEEN_TEXT_CHANGE: number = 2000;
     private richText: RichText;
     private readonly sampleArray: string[] = ['Hi', 'I love cats',
-        'For real', 'bisou', 'oopsi', 'intense',
-        'Lorem ipsum', 'CAAAAAATS', 'BG3 GOTY <3', 'Gideon', 'idk', 'there is a bug', 'mega rip'];
+        'for real', 'bisou', 'oopsi', 'intense',
+        'Lorem ipsum', 'CAAAAAATS', 'BG3 GOTY <3', 'blop', 'idk', 'there is a bug', 'rip Bunny :('];
     constructor() {
         super(false);
 
@@ -30,44 +34,34 @@ export class TextScene extends Scene {
         }
     }
 
-    private getRandomArray(): string {
-        let randomNum: number = getRandomNumber(0, 13);
+    private getRandomAsset(type: Type, lowerBound: number, upperBound: number): string | Sprite {
+        let randomNum: number = getRandomNumber(lowerBound, upperBound);
+        if (randomNum > upperBound)
+            randomNum = upperBound;
 
-        if (randomNum > 12)
-            randomNum = 12;
+        if (type == Type.Smiley)
+            return Sprite.from('smiley' + randomNum + '.png');
 
         return this.sampleArray[randomNum];
     }
 
-    private getRandomSmiley(): Sprite {
-        let randomNum: number = getRandomNumber(1, 30);
-        if (randomNum > 30)
-            randomNum = 30;
-
-        const resizedSprite = Sprite.from('smiley' + randomNum + '.png');
-
-        if (resizedSprite.width >= 64) {
-            const size = getRandomNumber(32, 64);
-            resizedSprite.width = size;
-            resizedSprite.height = size;
-        }
-
-        return resizedSprite;
-    }
-
     private changeRichText(): void {
-        const sizeTextArray: number = getRandomNumber(2, 7);
-        const sizeImageArray: number = getRandomNumber(3, 10);
+        const sizeTextArray: number = getRandomNumber(1, 7);
+        const sizeImageArray: number = getRandomNumber(1, 10);
+        const textArray: string[] = [];
+        const spriteArray: Sprite[] = [];
 
         for (let i = 0; i <= sizeTextArray; i++) {
-            this.richText.textArrays.push(this.getRandomArray());
+            textArray.push(<string>this.getRandomAsset(Type.Text, 0, 13));
         }
 
         for (let i = 0; i <= sizeImageArray; i++) {
-            this.richText.smileys.push(this.getRandomSmiley());
+            spriteArray.push(<Sprite>this.getRandomAsset(Type.Smiley, 1, 30));
         }
 
-        this.richText.textSize = getRandomNumber(12, 32);
+        this.richText.textArrays = textArray;
+        this.richText.smileys = spriteArray;
+        this.richText.textSize = getRandomNumber(12, 45);
 
         this.richText.modifyRichText(true);
     };
