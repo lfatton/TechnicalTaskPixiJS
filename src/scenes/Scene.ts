@@ -23,6 +23,9 @@ export abstract class Scene extends Container {
             tint: '#23092C'
         });
 
+        this.FPSCounterText.x = 10;
+        this.FPSCounterText.y = 10;
+
         this.addChild(this.FPSCounterText as DisplayObject);
 
         if (!isMainMenu)

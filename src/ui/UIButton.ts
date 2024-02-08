@@ -4,8 +4,8 @@ import { GameManager } from '../core/GameManager';
 export class UIButton extends Graphics {
     private buttonText: Text;
     constructor(buttonText: string,
-                buttonWidth: number = GameManager.width / 3,
-                buttonHeight: number = (GameManager.width / 3) / 5,
+                buttonWidth: number = GameManager.height / 2,
+                buttonHeight: number = GameManager.height / 6,
                 radius: number = 10,
                 fillColor: string | number = '#EE9438',
                 textColor: string | number = '#FFC871',

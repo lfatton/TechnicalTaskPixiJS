@@ -38,7 +38,11 @@ export class RichText extends Container {
                 this.putSmileyToScreen(value);
             });
         } else {
-            for (let i = 0; i < 6; i++) {
+            let index = getRandomNumber(2, 13);
+            if (index >= (this.textArrays.length + this.smileys.length))
+                index = this.textArrays.length + this.smileys.length - 2;
+
+            for (let i = 0; i < index; i++) {
                 if (i >= this.textArrays.length && i < this.smileys.length) {
                    this.putSmileyToScreen(this.smileys[i]);
                 }
@@ -86,7 +90,7 @@ export class RichText extends Container {
 
 
         image.x = this.currentXPos;
-        image.anchor.set(0.5);
+        image.anchor.set(0, 0.5);
         this.currentXPos += image.width;
 
         this.addChild(image as DisplayObject);

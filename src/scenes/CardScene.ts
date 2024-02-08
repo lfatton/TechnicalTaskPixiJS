@@ -11,8 +11,8 @@ export class CardScene extends Scene {
 
         this.stackLength = 288 + Sprite.from(Assets.get('card')).height;
         const leftStackPos: {x: number, y: number} = {
-            x : GameManager.width / 3,
-            y : GameManager.height / 2 + this.stackLength / 2
+            x : GameManager.width / 4,
+            y : GameManager.height / 2 + this.stackLength / 4
         };
 
         for (let i = 0; i < 144; i++) {
@@ -27,7 +27,7 @@ export class CardScene extends Scene {
         }
 
         const rightStackPos: {x: number, y: number} = {
-            x : GameManager.width / 3 * 2,
+            x : GameManager.width / 4 * 3,
             y : leftStackPos.y
         };
 
