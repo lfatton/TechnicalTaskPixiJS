@@ -8770,42 +8770,45 @@ class CardScene extends _Scene__WEBPACK_IMPORTED_MODULE_0__.Scene {
         super(false);
         this.stackLength = 0;
         this.cards = [];
-        this.stackLength = 288 + pixi_js__WEBPACK_IMPORTED_MODULE_1__.Sprite.from(pixi_js__WEBPACK_IMPORTED_MODULE_1__.Assets.get('card')).height;
-        const leftStackPos = {
+        this.stackLength = CardScene.CARDS_NUMBER * 2 + pixi_js__WEBPACK_IMPORTED_MODULE_1__.Sprite.from(pixi_js__WEBPACK_IMPORTED_MODULE_1__.Assets.get('card')).height;
+        this.leftStackPos = {
             x: _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.width / 4,
             y: _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.height / 2 + this.stackLength / 4
         };
-        for (let i = 0; i < 144; i++) {
+        for (let i = 0; i < CardScene.CARDS_NUMBER; i++) {
             const card = pixi_js__WEBPACK_IMPORTED_MODULE_1__.Sprite.from(pixi_js__WEBPACK_IMPORTED_MODULE_1__.Assets.get('card'));
             card.anchor.set(0.5);
-            card.x = leftStackPos.x;
-            card.y = leftStackPos.y - (i * 2);
+            card.x = this.leftStackPos.x;
+            card.y = this.leftStackPos.y - (i * 2);
             this.stackLength += card.y;
             this.cards.push(card);
             this.addChild(card);
         }
-        const rightStackPos = {
+        this.rightStackPos = {
             x: _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.width / 4 * 3,
-            y: leftStackPos.y
+            y: this.leftStackPos.y
         };
-        this.moveCards(rightStackPos);
+        this.moveCards();
     }
     update(deltaMS, fps) {
         super.update(deltaMS, fps);
         _tweenjs_tween_js__WEBPACK_IMPORTED_MODULE_3__.update();
     }
-    moveCards(rightStackPos) {
-        for (let i = 0; i < 144; i++) {
-            if ((144 - i - 1) >= this.cards.length)
+    moveCards() {
+        for (let i = 0; i < CardScene.CARDS_NUMBER; i++) {
+            if ((CardScene.CARDS_NUMBER - i - 1) >= this.cards.length)
                 return;
-            new _tweenjs_tween_js__WEBPACK_IMPORTED_MODULE_3__.Tween(this.cards[144 - i - 1])
-                .to({ x: rightStackPos.x, y: rightStackPos.y - (i * 2) }, 2000)
+            new _tweenjs_tween_js__WEBPACK_IMPORTED_MODULE_3__.Tween(this.cards[CardScene.CARDS_NUMBER - i - 1])
+                .to({ x: this.rightStackPos.x, y: this.rightStackPos.y - (i * 2) }, CardScene.ANIMATION_TIME)
                 .easing(_tweenjs_tween_js__WEBPACK_IMPORTED_MODULE_3__.Easing.Quartic.Out)
-                .delay(i * 1000)
+                .delay(i * CardScene.INTERVAL_BETWEEN_MOVES)
                 .start();
         }
     }
 }
+CardScene.CARDS_NUMBER = 144;
+CardScene.INTERVAL_BETWEEN_MOVES = 1000;
+CardScene.ANIMATION_TIME = 2000;
 
 
 /***/ }),
@@ -9089,13 +9092,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var Type;
+(function (Type) {
+    Type[Type["Text"] = 1] = "Text";
+    Type[Type["Smiley"] = 2] = "Smiley";
+})(Type || (Type = {}));
 class TextScene extends _Scene__WEBPACK_IMPORTED_MODULE_0__.Scene {
     constructor() {
         super(false);
         this.timeBetweenTextChange = 0;
         this.sampleArray = ['Hi', 'I love cats',
-            'For real', 'bisou', 'oopsi', 'intense',
-            'Lorem ipsum', 'CAAAAAATS', 'BG3 GOTY <3', 'Gideon', 'idk', 'there is a bug', 'mega rip'];
+            'for real', 'bisou', 'oopsi', 'intense',
+            'Lorem ipsum', 'CAAAAAATS', 'BG3 GOTY <3', 'blop', 'idk', 'there is a bug', 'rip Bunny :('];
         this.richText = new _ui_RichText__WEBPACK_IMPORTED_MODULE_3__.RichText();
         this.addChild(this.richText);
         this.richText.x = _core_GameManager__WEBPACK_IMPORTED_MODULE_4__.GameManager.width / 2;
@@ -9109,34 +9117,28 @@ class TextScene extends _Scene__WEBPACK_IMPORTED_MODULE_0__.Scene {
             this.timeBetweenTextChange -= TextScene.INTERVAL_BETWEEN_TEXT_CHANGE;
         }
     }
-    getRandomArray() {
-        let randomNum = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(0, 13);
-        if (randomNum > 12)
-            randomNum = 12;
+    getRandomAsset(type, lowerBound, upperBound) {
+        let randomNum = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(lowerBound, upperBound);
+        if (randomNum > upperBound)
+            randomNum = upperBound;
+        if (type == Type.Smiley)
+            return pixi_js__WEBPACK_IMPORTED_MODULE_1__.Sprite.from('smiley' + randomNum + '.png');
         return this.sampleArray[randomNum];
     }
-    getRandomSmiley() {
-        let randomNum = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(1, 30);
-        if (randomNum > 30)
-            randomNum = 30;
-        const resizedSprite = pixi_js__WEBPACK_IMPORTED_MODULE_1__.Sprite.from('smiley' + randomNum + '.png');
-        if (resizedSprite.width >= 64) {
-            const size = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(32, 64);
-            resizedSprite.width = size;
-            resizedSprite.height = size;
-        }
-        return resizedSprite;
-    }
     changeRichText() {
-        const sizeTextArray = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(2, 7);
-        const sizeImageArray = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(3, 10);
+        const sizeTextArray = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(1, 7);
+        const sizeImageArray = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(1, 10);
+        const textArray = [];
+        const spriteArray = [];
         for (let i = 0; i <= sizeTextArray; i++) {
-            this.richText.textArrays.push(this.getRandomArray());
+            textArray.push(this.getRandomAsset(Type.Text, 0, 13));
         }
         for (let i = 0; i <= sizeImageArray; i++) {
-            this.richText.smileys.push(this.getRandomSmiley());
+            spriteArray.push(this.getRandomAsset(Type.Smiley, 1, 30));
         }
-        this.richText.textSize = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(12, 32);
+        this.richText.textArrays = textArray;
+        this.richText.smileys = spriteArray;
+        this.richText.textSize = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(12, 45);
         this.richText.modifyRichText(true);
     }
     ;
@@ -9159,6 +9161,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/index.mjs");
 /* harmony import */ var _core_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../core/utils */ "./src/core/utils.ts");
+/* harmony import */ var _core_GameManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../core/GameManager */ "./src/core/GameManager.ts");
+
 
 
 class RichText extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
@@ -9171,8 +9175,6 @@ class RichText extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
         this.CreateRichText(isOrderRandom);
     }
     CreateRichText(isOrderRandom) {
-        this.removeChildren();
-        this.currentXPos = 0;
         let text = '';
         if (!isOrderRandom) {
             this.textArrays.forEach((value) => {
@@ -9208,6 +9210,8 @@ class RichText extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
         this.pivot.y = this.textSize / 2;
     }
     putTextToScreen(text) {
+        if (this.currentXPos > _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.width - 100)
+            return;
         const textToPrint = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Text(text, {
             fontFamily: 'Arial',
             fontSize: this.textSize,
@@ -9219,18 +9223,26 @@ class RichText extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
         this.addChild(textToPrint);
     }
     putSmileyToScreen(smiley) {
+        if (this.currentXPos > _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.width - 100)
+            return;
         const image = smiley;
-        if (image.width >= 64) {
-            const size = (0,_core_utils__WEBPACK_IMPORTED_MODULE_1__.getRandomNumber)(32, 64);
-            image.width = size;
-            image.height = size;
+        image.scale.set(this.textSize / image.height);
+        if (image.width >= 50) {
+            const ratio = smiley.width / smiley.height;
+            image.width = 50;
+            image.height = 50 / ratio;
         }
         image.x = this.currentXPos;
         image.anchor.set(0, 0.5);
         this.currentXPos += image.width;
         this.addChild(image);
     }
+    CleanRichText() {
+        this.removeChildren();
+        this.currentXPos = 0;
+    }
     modifyRichText(isOrderRandom) {
+        this.CleanRichText();
         this.CreateRichText(isOrderRandom);
     }
 }
