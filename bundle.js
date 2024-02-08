@@ -8772,8 +8772,8 @@ class CardScene extends _Scene__WEBPACK_IMPORTED_MODULE_0__.Scene {
         this.cards = [];
         this.stackLength = 288 + pixi_js__WEBPACK_IMPORTED_MODULE_1__.Sprite.from(pixi_js__WEBPACK_IMPORTED_MODULE_1__.Assets.get('card')).height;
         const leftStackPos = {
-            x: _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.width / 3,
-            y: _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.height / 2 + this.stackLength / 2
+            x: _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.width / 4,
+            y: _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.height / 2 + this.stackLength / 4
         };
         for (let i = 0; i < 144; i++) {
             const card = pixi_js__WEBPACK_IMPORTED_MODULE_1__.Sprite.from(pixi_js__WEBPACK_IMPORTED_MODULE_1__.Assets.get('card'));
@@ -8785,7 +8785,7 @@ class CardScene extends _Scene__WEBPACK_IMPORTED_MODULE_0__.Scene {
             this.addChild(card);
         }
         const rightStackPos = {
-            x: _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.width / 3 * 2,
+            x: _core_GameManager__WEBPACK_IMPORTED_MODULE_2__.GameManager.width / 4 * 3,
             y: leftStackPos.y
         };
         this.moveCards(rightStackPos);
@@ -9035,6 +9035,8 @@ class Scene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
             fontSize: 26,
             tint: '#23092C'
         });
+        this.FPSCounterText.x = 10;
+        this.FPSCounterText.y = 10;
         this.addChild(this.FPSCounterText);
         if (!isMainMenu)
             this.addBackToMainMenuBtn();
@@ -9182,7 +9184,10 @@ class RichText extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
             });
         }
         else {
-            for (let i = 0; i < 6; i++) {
+            let index = (0,_core_utils__WEBPACK_IMPORTED_MODULE_1__.getRandomNumber)(2, 13);
+            if (index >= (this.textArrays.length + this.smileys.length))
+                index = this.textArrays.length + this.smileys.length - 2;
+            for (let i = 0; i < index; i++) {
                 if (i >= this.textArrays.length && i < this.smileys.length) {
                     this.putSmileyToScreen(this.smileys[i]);
                 }
@@ -9221,7 +9226,7 @@ class RichText extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
             image.height = size;
         }
         image.x = this.currentXPos;
-        image.anchor.set(0.5);
+        image.anchor.set(0, 0.5);
         this.currentXPos += image.width;
         this.addChild(image);
     }
@@ -9249,7 +9254,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class UIButton extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Graphics {
-    constructor(buttonText, buttonWidth = _core_GameManager__WEBPACK_IMPORTED_MODULE_1__.GameManager.width / 3, buttonHeight = (_core_GameManager__WEBPACK_IMPORTED_MODULE_1__.GameManager.width / 3) / 5, radius = 10, fillColor = '#EE9438', textColor = '#FFC871', textSize = 36) {
+    constructor(buttonText, buttonWidth = _core_GameManager__WEBPACK_IMPORTED_MODULE_1__.GameManager.height / 2, buttonHeight = _core_GameManager__WEBPACK_IMPORTED_MODULE_1__.GameManager.height / 6, radius = 10, fillColor = '#EE9438', textColor = '#FFC871', textSize = 36) {
         super();
         this.on('pointertap', this.onClick, this);
         this.eventMode = 'dynamic';
