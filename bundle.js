@@ -8693,6 +8693,7 @@ class GameManager {
     }
     static loadAssets() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield pixi_js__WEBPACK_IMPORTED_MODULE_0__.Assets.load('smileys.json');
             yield pixi_js__WEBPACK_IMPORTED_MODULE_0__.Assets.load([
                 { alias: 'particle', src: 'particle.png' },
                 { alias: 'fire', src: 'fire.png' }
@@ -8717,6 +8718,28 @@ class GameManager {
             GameManager.currentScene.onResize(GameManager.width, GameManager.height);
         }
     }
+}
+
+
+/***/ }),
+
+/***/ "./src/core/utils.ts":
+/*!***************************!*\
+  !*** ./src/core/utils.ts ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getRandomNumber: () => (/* binding */ getRandomNumber),
+/* harmony export */   headsOrTails: () => (/* binding */ headsOrTails)
+/* harmony export */ });
+function getRandomNumber(min, max) {
+    return (Math.floor(Math.random() * (max - min) + min));
+}
+function headsOrTails() {
+    return getRandomNumber(0, 100) <= 50;
 }
 
 
@@ -8958,7 +8981,7 @@ __webpack_require__.r(__webpack_exports__);
 class Scene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     constructor(isMainMenu = true) {
         super();
-        this.timeSinceLastUpdate = 0;
+        this.timeSinceFPSTextChange = 0;
         pixi_js__WEBPACK_IMPORTED_MODULE_0__.BitmapFont.from('bitmapArialFont', {
             fill: '#FFFFFF',
             fontFamily: 'Arial',
@@ -8974,12 +8997,12 @@ class Scene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
             this.addBackToMainMenuBtn();
     }
     update(deltaMS, fps) {
-        if (!this.timeSinceLastUpdate)
+        if (!this.timeSinceFPSTextChange)
             this.updateFPS(fps);
-        this.timeSinceLastUpdate += deltaMS;
-        if (this.timeSinceLastUpdate > Scene.INTERVAL_BETWEEN_FPS_UPDATE) {
+        this.timeSinceFPSTextChange += deltaMS;
+        if (this.timeSinceFPSTextChange > Scene.INTERVAL_BETWEEN_FPS_UPDATE) {
             this.updateFPS(fps);
-            this.timeSinceLastUpdate -= Scene.INTERVAL_BETWEEN_FPS_UPDATE;
+            this.timeSinceFPSTextChange -= Scene.INTERVAL_BETWEEN_FPS_UPDATE;
         }
     }
     updateFPS(fps) {
@@ -9012,10 +9035,155 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   TextScene: () => (/* binding */ TextScene)
 /* harmony export */ });
 /* harmony import */ var _Scene__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Scene */ "./src/scenes/Scene.ts");
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/index.mjs");
+/* harmony import */ var _core_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../core/utils */ "./src/core/utils.ts");
+/* harmony import */ var _ui_RichText__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ui/RichText */ "./src/ui/RichText.ts");
+/* harmony import */ var _core_GameManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../core/GameManager */ "./src/core/GameManager.ts");
+
+
+
+
 
 class TextScene extends _Scene__WEBPACK_IMPORTED_MODULE_0__.Scene {
     constructor() {
         super(false);
+        this.timeBetweenTextChange = 0;
+        this.sampleArray = ['Hi', 'I love cats',
+            'For real', 'bisou', 'oopsi', 'intense',
+            'Lorem ipsum', 'CAAAAAATS', 'BG3 GOTY <3', 'Gideon', 'idk', 'there is a bug', 'mega rip'];
+        this.richText = new _ui_RichText__WEBPACK_IMPORTED_MODULE_3__.RichText();
+        this.addChild(this.richText);
+        this.richText.x = _core_GameManager__WEBPACK_IMPORTED_MODULE_4__.GameManager.width / 2;
+        this.richText.y = _core_GameManager__WEBPACK_IMPORTED_MODULE_4__.GameManager.height / 2;
+    }
+    update(deltaMS, fps) {
+        super.update(deltaMS, fps);
+        this.timeBetweenTextChange += deltaMS;
+        if (this.timeBetweenTextChange > TextScene.INTERVAL_BETWEEN_TEXT_CHANGE) {
+            this.changeRichText();
+            this.timeBetweenTextChange -= TextScene.INTERVAL_BETWEEN_TEXT_CHANGE;
+        }
+    }
+    getRandomArray() {
+        let randomNum = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(0, 13);
+        if (randomNum > 12)
+            randomNum = 12;
+        return this.sampleArray[randomNum];
+    }
+    getRandomSmiley() {
+        let randomNum = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(1, 30);
+        if (randomNum > 30)
+            randomNum = 30;
+        const resizedSprite = pixi_js__WEBPACK_IMPORTED_MODULE_1__.Sprite.from('smiley' + randomNum + '.png');
+        if (resizedSprite.width >= 64) {
+            const size = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(32, 64);
+            resizedSprite.width = size;
+            resizedSprite.height = size;
+        }
+        return resizedSprite;
+    }
+    changeRichText() {
+        const sizeTextArray = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(2, 7);
+        const sizeImageArray = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(3, 10);
+        for (let i = 0; i <= sizeTextArray; i++) {
+            this.richText.textArrays.push(this.getRandomArray());
+        }
+        for (let i = 0; i <= sizeImageArray; i++) {
+            this.richText.smileys.push(this.getRandomSmiley());
+        }
+        this.richText.textSize = (0,_core_utils__WEBPACK_IMPORTED_MODULE_2__.getRandomNumber)(12, 32);
+        this.richText.modifyRichText(true);
+    }
+    ;
+}
+TextScene.INTERVAL_BETWEEN_TEXT_CHANGE = 2000;
+
+
+/***/ }),
+
+/***/ "./src/ui/RichText.ts":
+/*!****************************!*\
+  !*** ./src/ui/RichText.ts ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   RichText: () => (/* binding */ RichText)
+/* harmony export */ });
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/index.mjs");
+/* harmony import */ var _core_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../core/utils */ "./src/core/utils.ts");
+
+
+class RichText extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
+    constructor(textArrays = ['Default text', 'sorry :('], smileys = [pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite.from('smiley1.png')], textSize = 24, isOrderRandom = false) {
+        super();
+        this.currentXPos = 0;
+        this.textArrays = textArrays;
+        this.smileys = smileys;
+        this.textSize = textSize;
+        this.CreateRichText(isOrderRandom);
+    }
+    CreateRichText(isOrderRandom) {
+        this.removeChildren();
+        this.currentXPos = 0;
+        let text = '';
+        if (!isOrderRandom) {
+            this.textArrays.forEach((value) => {
+                text += value + ' ';
+            });
+            this.putTextToScreen(text);
+            this.smileys.forEach((value) => {
+                this.putSmileyToScreen(value);
+            });
+        }
+        else {
+            for (let i = 0; i < 6; i++) {
+                if (i >= this.textArrays.length && i < this.smileys.length) {
+                    this.putSmileyToScreen(this.smileys[i]);
+                }
+                if (i >= this.smileys.length && i < this.textArrays.length) {
+                    this.putTextToScreen(this.textArrays[i] + ' ');
+                }
+                if ((0,_core_utils__WEBPACK_IMPORTED_MODULE_1__.headsOrTails)()) {
+                    if (i < this.textArrays.length)
+                        this.putTextToScreen(this.textArrays[i] + ' ');
+                }
+                else {
+                    if (i < this.smileys.length)
+                        this.putSmileyToScreen(this.smileys[i]);
+                }
+            }
+        }
+        this.pivot.x = this.currentXPos / 2;
+        this.pivot.y = this.textSize / 2;
+    }
+    putTextToScreen(text) {
+        const textToPrint = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Text(text, {
+            fontFamily: 'Arial',
+            fontSize: this.textSize,
+            fill: '#000000'
+        });
+        textToPrint.x = this.currentXPos;
+        textToPrint.anchor.set(0, 0.5);
+        this.currentXPos += textToPrint.width;
+        this.addChild(textToPrint);
+    }
+    putSmileyToScreen(smiley) {
+        const image = smiley;
+        if (image.width >= 64) {
+            const size = (0,_core_utils__WEBPACK_IMPORTED_MODULE_1__.getRandomNumber)(32, 64);
+            image.width = size;
+            image.height = size;
+        }
+        image.x = this.currentXPos;
+        image.anchor.set(0, 0.5);
+        this.currentXPos += image.width;
+        this.addChild(image);
+    }
+    modifyRichText(isOrderRandom) {
+        this.CreateRichText(isOrderRandom);
     }
 }
 
