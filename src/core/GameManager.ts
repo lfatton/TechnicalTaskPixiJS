@@ -43,9 +43,9 @@ export class GameManager {
         GameManager.app.stage.addChild(GameManager.currentScene as DisplayObject);
     }
 
-    private static update(timeDelta: number): void {
+    private static update(deltaTime: number): void {
         if (GameManager.currentScene) {
-            GameManager.currentScene.update(timeDelta);
+            GameManager.currentScene.update(deltaTime, GameManager.app.ticker.FPS.toFixed(0));
         }
     }
 

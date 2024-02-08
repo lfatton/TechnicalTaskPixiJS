@@ -19,6 +19,7 @@
     "html-webpack-plugin": "^5.6.0",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
-    "mini-css-extract-plugin": "^2.8.0"
+    "mini-css-extract-plugin": "^2.8.0",
+    "tweenjs": "^1.0.2"
   }
 }

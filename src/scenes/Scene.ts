@@ -15,7 +15,7 @@ export abstract class Scene extends Container {
             fontSize: 26
         });
 
-        this.FPSCounterText = new BitmapText('FPS ' + Ticker.shared.FPS.toFixed(0), {
+        this.FPSCounterText = new BitmapText('FPS: ', {
             fontName: 'bitmapArialFont',
             fontSize: 26,
             tint: '#23092C'
@@ -27,12 +27,12 @@ export abstract class Scene extends Container {
             this.addBackToMainMenuBtn();
     }
 
-    public update(deltaTime: number): void {
-        this.updateFPS();
+    public update(deltaTime: number, fps: string): void {
+        this.updateFPS(fps);
     }
 
-    public updateFPS(): void {
-        this.FPSCounterText.text = 'FPS ' + Ticker.shared.FPS.toFixed(0);
+    public updateFPS(fps: string): void {
+        this.FPSCounterText.text = 'FPS: ' + fps;
     }
 
     public onResize(screenWidth:number, screenHeight:number): void { }
